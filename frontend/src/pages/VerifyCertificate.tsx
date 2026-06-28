@@ -23,7 +23,8 @@ export const VerifyCertificate: React.FC = () => {
     setLoading(true);
     setSearched(true);
     try {
-      const res = await fetch(`http://localhost:3000/api/v1/verify/cert/${id.trim()}`);
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const res = await fetch(`${API_URL}/api/v1/verify/cert/${id.trim()}`);
       const data = await res.json();
       setResult(data);
     } catch (err) {

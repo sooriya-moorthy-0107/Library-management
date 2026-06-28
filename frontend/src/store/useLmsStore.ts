@@ -56,7 +56,8 @@ export const useLmsStore = create<LmsState>((set, get) => ({
     }
     headers.set('Content-Type', 'application/json');
 
-    const res = await fetch(`http://localhost:3000/api/v1${path}`, {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    const res = await fetch(`${API_URL}/api/v1${path}`, {
       ...options,
       headers,
     });
@@ -71,7 +72,8 @@ export const useLmsStore = create<LmsState>((set, get) => ({
   login: async (email, password) => {
     set({ loginError: null });
     try {
-      const res = await fetch('http://localhost:3000/api/v1/auth/login', {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const res = await fetch(`${API_URL}/api/v1/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -112,7 +114,8 @@ export const useLmsStore = create<LmsState>((set, get) => ({
   verifyMfa: async (code, isSetup) => {
     const email = get().mfaEmail;
     try {
-      const res = await fetch('http://localhost:3000/api/v1/auth/mfa/verify', {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const res = await fetch(`${API_URL}/api/v1/auth/mfa/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, code, isSetup }),
