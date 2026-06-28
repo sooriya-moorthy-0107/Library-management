@@ -52,7 +52,7 @@ export class Payment {
   @Column({ nullable: true })
   receiptUrl: string;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   paidAt: Date;
 
   @CreateDateColumn()

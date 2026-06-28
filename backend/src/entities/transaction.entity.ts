@@ -35,13 +35,13 @@ export class Transaction {
   @JoinColumn({ name: 'returnedToId' })
   returnedTo: User;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'timestamp' })
   issuedAt: Date;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'timestamp' })
   dueAt: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   returnedAt: Date;
 
   @Column({ type: 'smallint', default: 0 })
