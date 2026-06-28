@@ -31,20 +31,29 @@ export async function getDbConfig(): Promise<TypeOrmModuleOptions> {
   const username = process.env.DB_USERNAME || 'lms_app';
   const password = process.env.DB_PASSWORD || 'lms_secure_pass_2026';
   const database = process.env.DB_NAME || 'lumina_lms';
+  const databaseUrl = process.env.DATABASE_URL;
 
-  const pgClient = new Client({
-    host,
-    port,
-    user: username,
-    password,
-    database,
-    connectionTimeoutMillis: 2000, // Fail fast if unreachable
-  });
+  // Use DATABASE_URL if available (Render), otherwise fallback to individual variables
+  const clientConfig = databaseUrl 
+    ? { connectionString: databaseUrl, connectionTimeoutMillis: 2000 }
+    : { host, port, user: username, password, database, connectionTimeoutMillis: 2000 };
+
+  const pgClient = new Client(clientConfig);
 
   try {
     await pgClient.connect();
     await pgClient.end();
     console.log('Successfully connected to PostgreSQL database. Using PostgreSQL.');
+    
+    if (databaseUrl) {
+      return {
+        type: 'postgres',
+        url: databaseUrl,
+        entities,
+        synchronize: true,
+      };
+    }
+
     return {
       type: 'postgres',
       host,
@@ -53,11 +62,11 @@ export async function getDbConfig(): Promise<TypeOrmModuleOptions> {
       password,
       database,
       entities,
-      synchronize: true, // For development reference implementation
+      synchronize: true,
     };
   } catch (error) {
     console.warn(
-      `PostgreSQL database is unreachable on ${host}:${port} (Error: ${(error as Error).message}). Falling back to local SQLite.`
+      `PostgreSQL database is unreachable (Error: ${(error as Error).message}). Falling back to local SQLite.`
     );
     return {
       type: 'better-sqlite3' as const,
