@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lumina Library Management - Circulation Workflow</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@450&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "text-muted": "#475569",
+                    "surface-variant": "#e0e3e5",
+                    "border-subtle": "#E2E8F0",
+                    "on-primary-fixed": "#00164e",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-secondary": "#ffffff",
+                    "status-warning": "#F59E0B",
+                    "surface-tint": "#4059aa",
+                    "status-success": "#10B981",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#0b1c30",
+                    "surface-container-high": "#e6e8ea",
+                    "on-primary": "#ffffff",
+                    "on-surface": "#191c1e",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb691",
+                    "tertiary-fixed": "#ffdbcb",
+                    "on-primary-container": "#90a8ff",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-tertiary-fixed": "#341100",
+                    "on-surface-variant": "#444651",
+                    "surface-secondary": "#F1F5F9",
+                    "text-main": "#0F172A",
+                    "secondary": "#505f76",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "primary-container": "#1e3a8a",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#d3e4fe",
+                    "surface-container": "#eceef0",
+                    "tertiary": "#4b1c00",
+                    "on-background": "#191c1e",
+                    "surface": "#f7f9fb",
+                    "surface-bright": "#f7f9fb",
+                    "on-primary-fixed-variant": "#264191",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#dce1ff",
+                    "surface-container-low": "#f2f4f6",
+                    "accent-info": "#3B82F6",
+                    "on-tertiary-fixed-variant": "#773205",
+                    "on-secondary-container": "#54647a",
+                    "on-tertiary-container": "#f39461",
+                    "background": "#f7f9fb",
+                    "outline": "#757682",
+                    "inverse-surface": "#2d3133",
+                    "status-error": "#EF4444",
+                    "surface-dim": "#d8dadc",
+                    "primary": "#00236f",
+                    "surface-primary": "#FFFFFF",
+                    "outline-variant": "#c5c5d3",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "inverse-primary": "#b6c4ff",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "secondary-container": "#d0e1fb",
+                    "tertiary-container": "#6e2c00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-desktop": "32px",
+                    "margin-tablet": "24px",
+                    "margin-mobile": "16px",
+                    "grid-columns": "12",
+                    "base-unit": "4px",
+                    "gutter": "16px",
+                    "container-max-width": "1440px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Hanken Grotesk"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "label-bold": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "data-mono": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "label-bold": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "data-mono": ["13px", {"lineHeight": "18px", "fontWeight": "450"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .transition-height { transition: height 0.3s ease-in-out; }
+        .tab-active { position: relative; }
+        .tab-active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #00236f;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden h-screen flex">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="w-[240px] h-screen fixed left-0 top-0 bg-surface dark:bg-inverse-surface border-r border-border-subtle dark:border-outline-variant flex flex-col py-6 px-4 z-50">
+<div class="mb-8 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" data-icon="library_books">library_books</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Main Library</h1>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Super Admin Panel</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto scrollbar-hide">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-bold text-label-bold">Procurement</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="library_books">library_books</span>
+<span class="font-label-bold text-label-bold">Catalog</span>
+</a>
+<!-- Active Tab: Circulation -->
+<a class="flex items-center gap-3 px-3 py-2 bg-secondary-container text-on-secondary-container font-bold rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="swap_horiz">swap_horiz</span>
+<span class="font-label-bold text-label-bold">Circulation</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="font-label-bold text-label-bold">Audit Logs</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-bold text-label-bold">User Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-bold text-label-bold">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-border-subtle pt-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-bold text-label-bold">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-bold text-label-bold">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[240px] flex flex-col h-screen relative bg-surface-bright">
+<!-- TopNavBar (Authority: JSON) -->
+<header class="w-full h-16 bg-surface-primary dark:bg-inverse-surface border-b border-border-subtle dark:border-outline-variant flex justify-between items-center px-margin-desktop sticky top-0 z-40">
+<div class="flex items-center gap-8">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">Lumina Library Management</span>
+<nav class="hidden md:flex gap-6">
+<a class="font-body-md text-body-md text-text-muted hover:bg-surface-secondary transition-colors cursor-pointer active:opacity-80 px-2 py-1 rounded" href="#">Dashboard</a>
+<a class="font-body-md text-body-md text-text-muted hover:bg-surface-secondary transition-colors cursor-pointer active:opacity-80 px-2 py-1 rounded" href="#">Analytics</a>
+<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative flex items-center bg-surface-secondary rounded-full px-3 py-1.5 border border-border-subtle">
+<span class="material-symbols-outlined text-text-muted text-[20px]" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-48 ml-2 placeholder:text-text-muted" placeholder="Search transactions..." type="text"/>
+</div>
+<button class="w-10 h-10 flex items-center justify-center text-text-muted hover:bg-surface-secondary rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2.5 right-2.5 w-2 h-2 bg-error rounded-full border-2 border-surface-primary"></span>
+</button>
+<div class="h-8 w-[1px] bg-border-subtle mx-2"></div>
+<div class="flex items-center gap-3 cursor-pointer">
+<img class="w-9 h-9 rounded-full object-cover border border-border-subtle" data-alt="A professional headshot of a female university administrator in her 40s, wearing a tailored navy blazer and minimalist jewelry, set against a clean white academic office background. The lighting is bright and even, reflecting a high-end corporate aesthetic consistent with the Lumina brand palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMMsIGkCPQt4eKM3O4gOb-WGBhgsP4OrgrP5qPSTLFuLcVM3CnHXd6C7RjaYVC38tHxfCCBm4QJIy9pNkX9zMdO38liLj0cEUHLNckqL3TIjmUCVejltsbwT5vZIvG19MOzHkXrNXe47yq-507LD2LWX-yJGGK7X5jtR3wLO6_BpgL-zOv5PLailwyILteABofT2ZyQbgYpjzeY7H4odgZSMJ5EPz4yQM1PMJYffFJO6XHNXExsmsEHAKq_deW_-W32DosgVGh1bU"/>
+<span class="font-label-bold text-label-bold text-text-main hidden lg:block">Admin. Elena</span>
+</div>
+</div>
+</header>
+<!-- Transaction Workflow Content -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Pane: Active Requests List -->
+<section class="w-1/3 min-w-[380px] border-r border-border-subtle flex flex-col bg-surface">
+<div class="p-6 pb-4">
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-headline-lg text-headline-lg text-text-main">Active Requests</h2>
+<span class="bg-primary-container text-white text-[11px] font-bold px-2 py-0.5 rounded-full">24 Pending</span>
+</div>
+<div class="flex gap-2 p-1 bg-surface-container-low rounded-lg mb-4">
+<button class="flex-1 py-1.5 text-body-sm font-bold bg-white shadow-sm rounded-md text-primary">All</button>
+<button class="flex-1 py-1.5 text-body-sm font-medium text-text-muted hover:bg-white/50 rounded-md transition-all">Issue</button>
+<button class="flex-1 py-1.5 text-body-sm font-medium text-text-muted hover:bg-white/50 rounded-md transition-all">Return</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-4 pb-6 space-y-3">
+<!-- Request Card 1 (Active/Selected) -->
+<div class="bg-white border-2 border-primary p-4 rounded-xl shadow-sm cursor-pointer transition-all hover:border-primary">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest">Request #TRX-8821</span>
+<span class="flex items-center gap-1 text-[10px] font-bold text-status-warning bg-status-warning/10 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[12px]" data-icon="schedule" data-weight="fill" style="font-variation-settings: 'FILL' 1;">schedule</span>
+                                PENDING ISSUE
+                            </span>
+</div>
+<h3 class="font-label-bold text-body-md text-text-main mb-1">Principles of Neural Science</h3>
+<p class="text-body-sm text-text-muted mb-3">Requested by: <span class="font-medium text-text-main">Dr. Julian Thorne</span></p>
+<div class="flex items-center gap-4 text-[12px] text-text-muted">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="book">book</span> Hardcover</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span> Oct 12, 10:45 AM</span>
+</div>
+</div>
+<!-- Request Card 2 -->
+<div class="bg-white border border-border-subtle p-4 rounded-xl hover:bg-surface-secondary cursor-pointer transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-text-muted uppercase tracking-widest">Request #TRX-8794</span>
+<span class="flex items-center gap-1 text-[10px] font-bold text-accent-info bg-accent-info/10 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[12px]" data-icon="sync" data-weight="fill" style="font-variation-settings: 'FILL' 1;">sync</span>
+                                RENEWAL
+                            </span>
+</div>
+<h3 class="font-label-bold text-body-md text-text-main mb-1">A Brief History of Time</h3>
+<p class="text-body-sm text-text-muted mb-3">Requested by: <span class="font-medium text-text-main">Sarah Jenkins (PG)</span></p>
+<div class="flex items-center gap-4 text-[12px] text-text-muted">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="book">book</span> Paperback</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span> Oct 12, 09:30 AM</span>
+</div>
+</div>
+<!-- Request Card 3 -->
+<div class="bg-white border border-border-subtle p-4 rounded-xl hover:bg-surface-secondary cursor-pointer transition-all opacity-80">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-text-muted uppercase tracking-widest">Request #TRX-8760</span>
+<span class="flex items-center gap-1 text-[10px] font-bold text-status-success bg-status-success/10 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[12px]" data-icon="keyboard_return" data-weight="fill" style="font-variation-settings: 'FILL' 1;">keyboard_return</span>
+                                RETURN
+                            </span>
+</div>
+<h3 class="font-label-bold text-body-md text-text-main mb-1">Architecture of Open Source</h3>
+<p class="text-body-sm text-text-muted mb-3">Requested by: <span class="font-medium text-text-main">Liam Zhao (UG)</span></p>
+<div class="flex items-center gap-4 text-[12px] text-text-muted">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="book">book</span> Hardcover</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span> Oct 11, 04:15 PM</span>
+</div>
+</div>
+<!-- Request Card 4 -->
+<div class="bg-white border border-border-subtle p-4 rounded-xl hover:bg-surface-secondary cursor-pointer transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-text-muted uppercase tracking-widest">Request #TRX-8755</span>
+<span class="flex items-center gap-1 text-[10px] font-bold text-status-warning bg-status-warning/10 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[12px]" data-icon="schedule" data-weight="fill" style="font-variation-settings: 'FILL' 1;">schedule</span>
+                                PENDING ISSUE
+                            </span>
+</div>
+<h3 class="font-label-bold text-body-md text-text-main mb-1">Deep Learning with Python</h3>
+<p class="text-body-sm text-text-muted mb-3">Requested by: <span class="font-medium text-text-main">Prof. Alan Turing</span></p>
+<div class="flex items-center gap-4 text-[12px] text-text-muted">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="book">book</span> Digital Copy</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span> Oct 11, 02:00 PM</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Pane: Request Details & Controls -->
+<section class="flex-1 bg-white flex flex-col overflow-y-auto">
+<!-- Detail Header -->
+<div class="p-8 border-b border-border-subtle flex justify-between items-start">
+<div class="flex gap-6">
+<div class="w-32 h-44 bg-surface-container-low rounded shadow-md overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional product photography shot of the book cover for 'Principles of Neural Science' by Eric Kandel. The cover features a clean, academic design with a schematic of a neuron. High-quality lighting highlights the texture of the hardcover against a neutral studio background, conveying academic authority and prestige." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9ClW68hcl6oRxcHHKd-2BjBVK4wyHRUw2OGwjEbOMQffVN0OIrsfDrwVo1-_9e0FVS5sbFb_z-3V64giR7onzg9j-4RCjkWS2a18TjU1hNx-yDdRcQEbcjjzRUbojLUdIwmG0NLHenA6OEw_4v32MTUqcHSh3QLsx68socor9A_EoXUYMgDSFDoDEGxOFdR2H_EUQseda4zsL3Ti7HSgk9F9jh6aDhJ_w7N6J9vqieIbvhu3gZGSE269eefaPKuTnPsp_gvO3KnE"/>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary text-on-primary text-[10px] font-bold px-2 py-0.5 rounded">ITEM ID: 660-982-1A</span>
+<span class="text-status-success text-[10px] font-bold">AVAILABLE IN STACK 4B</span>
+</div>
+<h2 class="font-display-lg text-display-lg text-text-main mb-1">Principles of Neural Science</h2>
+<p class="text-body-lg text-text-muted mb-4">Eric R. Kandel, James H. Schwartz, Thomas M. Jessell</p>
+<div class="flex gap-8">
+<div class="flex flex-col">
+<span class="text-[10px] text-text-muted font-bold uppercase">Requested Duration</span>
+<span class="font-label-bold text-text-main">21 Days (Oct 12 - Nov 02)</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] text-text-muted font-bold uppercase">Patron Type</span>
+<span class="font-label-bold text-text-main">Faculty / Researcher</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-3 items-end">
+<div class="flex gap-2">
+<button class="bg-status-error/10 text-status-error px-4 py-2 rounded-lg font-bold text-body-sm hover:bg-status-error/20 transition-all">Reject Request</button>
+<button class="bg-primary text-on-primary px-8 py-2 rounded-lg font-bold text-body-sm hover:opacity-90 shadow-md transition-all flex items-center gap-2" id="approve-btn">
+<span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+                                Approve Issue
+                            </button>
+</div>
+<p class="text-[11px] text-text-muted italic">A digital receipt will be auto-generated upon approval.</p>
+</div>
+</div>
+<!-- Bento Grid Content -->
+<div class="p-8 grid grid-cols-12 gap-6">
+<!-- Patron Information Card -->
+<div class="col-span-7 bg-surface-container-lowest border border-border-subtle p-6 rounded-xl flex flex-col">
+<h3 class="font-headline-md text-headline-md mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="person">person</span>
+                            Patron Details
+                        </h3>
+<div class="flex items-center gap-4 mb-6">
+<div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center text-primary font-bold text-xl">JT</div>
+<div>
+<h4 class="font-label-bold text-body-lg text-text-main">Dr. Julian Thorne</h4>
+<p class="text-body-sm text-text-muted">ID: 2024-FAC-4592 | Dept. of Neuroscience</p>
+<div class="flex gap-2 mt-1">
+<span class="text-[10px] bg-status-success/10 text-status-success px-2 py-0.5 rounded-full font-bold">VERIFIED</span>
+<span class="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">NO OVERDUES</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 border-t border-border-subtle pt-4">
+<div>
+<span class="text-[10px] font-bold text-text-muted uppercase">Email Address</span>
+<p class="text-body-sm font-medium">j.thorne@university.edu</p>
+</div>
+<div>
+<span class="text-[10px] font-bold text-text-muted uppercase">Phone Number</span>
+<p class="text-body-sm font-medium">+1 (555) 012-3456</p>
+</div>
+<div>
+<span class="text-[10px] font-bold text-text-muted uppercase">Current Holdings</span>
+<p class="text-body-sm font-medium">2 Books (Limit: 10)</p>
+</div>
+<div>
+<span class="text-[10px] font-bold text-text-muted uppercase">Last Library Visit</span>
+<p class="text-body-sm font-medium">Oct 05, 2023</p>
+</div>
+</div>
+</div>
+<!-- Transaction Summary Card -->
+<div class="col-span-5 bg-surface-primary border border-border-subtle p-6 rounded-xl relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/5 rounded-full"></div>
+<h3 class="font-headline-md text-headline-md mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="receipt_long">receipt_long</span>
+                            Terms & Conditions
+                        </h3>
+<ul class="space-y-3">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-status-success text-[18px] mt-0.5" data-icon="check">check</span>
+<p class="text-body-sm text-text-main">Subject to $2.00/day late fine after Nov 02.</p>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-status-success text-[18px] mt-0.5" data-icon="check">check</span>
+<p class="text-body-sm text-text-main">Replacement value: <span class="font-bold">$245.00</span></p>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-status-success text-[18px] mt-0.5" data-icon="check">check</span>
+<p class="text-body-sm text-text-main">Auto-renewal allowed (max 2 times).</p>
+</li>
+</ul>
+<div class="mt-6 p-4 bg-surface-secondary rounded-lg border border-dashed border-border-subtle">
+<p class="text-[11px] text-text-muted leading-tight">By approving, the item status will change from 'Available' to 'Checked Out' and the patron will receive an automated confirmation email with PDF receipt attached.</p>
+</div>
+</div>
+<!-- Audit Log & Activity Section -->
+<div class="col-span-12 bg-surface-container-lowest border border-border-subtle p-6 rounded-xl">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="history">history</span>
+                                Transaction Audit Log
+                            </h3>
+<button class="text-primary font-bold text-[12px] hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="download">download</span> Full History PDF
+                            </button>
+</div>
+<div class="relative pl-6 space-y-6 before:content-[''] before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-[2px] before:bg-border-subtle">
+<!-- Log Entry 1 -->
+<div class="relative">
+<span class="absolute -left-[24px] top-1.5 w-4 h-4 bg-white border-2 border-primary rounded-full z-10"></span>
+<div class="flex justify-between">
+<div>
+<p class="text-body-md text-text-main font-bold">Request Initiated</p>
+<p class="text-body-sm text-text-muted">Patron requested 'Principles of Neural Science' via Student Portal.</p>
+</div>
+<div class="text-right">
+<p class="text-[11px] font-bold text-text-main">Oct 12, 10:45 AM</p>
+<p class="text-[10px] text-text-muted">IP: 192.168.1.104</p>
+</div>
+</div>
+</div>
+<!-- Log Entry 2 -->
+<div class="relative">
+<span class="absolute -left-[24px] top-1.5 w-4 h-4 bg-white border-2 border-border-subtle rounded-full z-10"></span>
+<div class="flex justify-between">
+<div>
+<p class="text-body-md text-text-main font-bold">Availability Verification</p>
+<p class="text-body-sm text-text-muted">System confirmed stock availability in Library Branch A (Stacks).</p>
+</div>
+<div class="text-right">
+<p class="text-[11px] font-bold text-text-main">Oct 12, 10:45 AM</p>
+<p class="text-[10px] text-text-muted">Automated Service</p>
+</div>
+</div>
+</div>
+<!-- Log Entry 3 -->
+<div class="relative">
+<span class="absolute -left-[24px] top-1.5 w-4 h-4 bg-white border-2 border-border-subtle rounded-full z-10"></span>
+<div class="flex justify-between">
+<div>
+<p class="text-body-md text-text-main font-bold">Manual Review Required</p>
+<p class="text-body-sm text-text-muted">Transaction flagged for manual approval due to faculty priority status.</p>
+</div>
+<div class="text-right">
+<p class="text-[11px] font-bold text-text-main">Oct 12, 10:46 AM</p>
+<p class="text-[10px] text-text-muted">Routing Logic A-1</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Feedback Overlay (Toast) -->
+<div class="fixed bottom-10 right-10 translate-y-20 opacity-0 bg-inverse-surface text-on-primary-fixed p-4 rounded-xl shadow-2xl flex items-center gap-4 transition-all duration-500 z-[100] max-w-sm border border-white/10" id="success-toast">
+<div class="w-10 h-10 bg-status-success/20 text-status-success rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="font-bold text-body-md text-white">Issue Approved</p>
+<p class="text-body-sm text-white/70">Receipt #REC-2023-442 generated and emailed.</p>
+</div>
+<button class="ml-4 text-white/50 hover:text-white" onclick="hideToast()">
+<span class="material-symbols-outlined text-[18px]" data-icon="close">close</span>
+</button>
+</div>
+</main>
+<!-- Floating Action Button (Mandatory logic check: suppressed here as per instructions for Details/Transactional screens) -->
+<script>
+        // Micro-interactions
+        const approveBtn = document.getElementById('approve-btn');
+        const toast = document.getElementById('success-toast');
+
+        approveBtn.addEventListener('click', () => {
+            // Visual feedback on button
+            approveBtn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing...
+            `;
+            approveBtn.disabled = true;
+            approveBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            // Simulate server request
+            setTimeout(() => {
+                showToast();
+                approveBtn.innerHTML = `
+                    <span class="material-symbols-outlined text-[18px]" data-icon="check_circle">check_circle</span>
+                    Approve Issue
+                `;
+                approveBtn.disabled = false;
+                approveBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                
+                // Add new audit log entry dynamically (mock)
+                const logContainer = document.querySelector('.space-y-6');
+                const newEntry = document.createElement('div');
+                newEntry.className = 'relative';
+                newEntry.innerHTML = `
+                    <span class="absolute -left-[24px] top-1.5 w-4 h-4 bg-status-success border-2 border-white rounded-full z-10 shadow-sm animate-pulse"></span>
+                    <div class="flex justify-between">
+                        <div>
+                            <p class="text-body-md text-text-main font-bold text-status-success">Issue Authorized</p>
+                            <p class="text-body-sm text-text-muted">Transaction approved by Admin. Elena. Item status updated.</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[11px] font-bold text-text-main">Just Now</p>
+                            <p class="text-[10px] text-text-muted">User ID: ADMIN_401</p>
+                        </div>
+                    </div>
+                `;
+                logContainer.insertBefore(newEntry, logContainer.firstChild);
+            }, 1200);
+        });
+
+        function showToast() {
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(hideToast, 5000);
+        }
+
+        function hideToast() {
+            toast.classList.add('translate-y-20', 'opacity-0');
+            toast.classList.remove('translate-y-0', 'opacity-100');
+        }
+
+        // Active state simulation for request list
+        const cards = document.querySelectorAll('.w-1\/3 .bg-white');
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                cards.forEach(c => {
+                    c.classList.remove('border-primary', 'border-2', 'shadow-sm');
+                    c.classList.add('border-border-subtle', 'border');
+                });
+                card.classList.add('border-primary', 'border-2', 'shadow-sm');
+                card.classList.remove('border-border-subtle', 'border');
+            });
+        });
+    </script>
+</body></html>
